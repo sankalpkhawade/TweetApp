@@ -2,13 +2,14 @@ import logo from './logo.svg';
 import './App.css';
 import Login from './pages/login'
 import CustomLoader from './components/custom-loader'
+import CustomNavBar from './components/custom-nav-bar'
 import { Provider, connect } from 'react-redux';
 import store from './redux/store';
 import ForgotPassword from './pages/forgot-passwd';
 import { pages } from './constants/strings';
 import Register from './pages/register';
 import React from 'react';
-import Home from "./pages/home";
+import Root from "./pages/root.component.js";
 
 export default function () {
   return (
@@ -35,7 +36,10 @@ export function App(props) {
       <CustomLoader />
       {
         isAuthenticated ?
-          <Home />
+          <div style={{width:"100%", height:"100%", }}>
+            <CustomNavBar />
+            <Root selectedPage={props.global.selectedPage}/>
+          </div>
           :
           props.global.selectedPage == pages.LOGIN ?
             <Login /> :
