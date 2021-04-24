@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Login from './pages/login'
 import CustomLoader from './components/custom-loader'
@@ -29,7 +28,7 @@ export function App(props) {
     } else {
       setIsAuthenticated(false);
     }
-  }, [])
+  }, [localStorage.getItem("isAuthenticated")])
 
   return (
     <>

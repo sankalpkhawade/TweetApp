@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from './home';
 import { pages } from '../constants/strings';
+import MyTweets from './my-tweets';
 
 export default function Root(props) {
   let component = null;
@@ -9,8 +10,11 @@ export default function Root(props) {
       component = <Home />;
       break;
     }
+    case pages.MY_TWEETS: {
+      component = <MyTweets />;
+      break;
+    }
     default:
-      console.log("hi")
       component = <Home />;
   }
   return (

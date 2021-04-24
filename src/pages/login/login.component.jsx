@@ -38,7 +38,8 @@ export default function Login(props) {
     const onLoginClick = async () => {
 
         if (values.emailId = "sainag" && values.password == "sainag") {
-            await localStorage.setItem("isAuthenticated", true)
+            await localStorage.setItem("isAuthenticated", true);
+            props.updateSelectedPage(pages.HOME)
         } else {
             setErrorMessage("Incorrect Credentials")
         }

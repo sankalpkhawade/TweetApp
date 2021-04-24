@@ -6,9 +6,9 @@ import { pages } from '../../constants/strings';
 import 'bootstrap/dist/js/bootstrap.bundle'
 
 export default function CustomNavBar(props) {
-  
+
   const onLogout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     window.location.reload();
   };
   React.useEffect(() => {
@@ -43,13 +43,13 @@ export default function CustomNavBar(props) {
         <div className="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item ">
-              <a class="nav-link" style={{ color: "white"  }} href="#">Home</a>
+              <a class="nav-link" style={{ color: "white", backgroundColor: props.selectedPage == pages.HOME && "#3295d1" }} href="#" onClick={() => onNavItemClick(pages.HOME)} >Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" style={{ color: "white" }} href="#">My Tweets</a>
+              <a class="nav-link" style={{ color: "white", backgroundColor: props.selectedPage == pages.MY_TWEETS && "#3295d1" }} href="#" onClick={() => onNavItemClick(pages.MY_TWEETS)} >My Tweets</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" style={{ color: "white" }} href="#">All Users</a>
+              <a class="nav-link" style={{ color: "white", backgroundColor: props.selectedPage == pages.ALL_USERS && "#3295d1" }} href="#" onClick={() => onNavItemClick(pages.ALL_USERS)} >All Users</a>
             </li>
           </ul>
           <button className="nav-link remove_button_styling" style={{ padding: 0, display: "inline-block", }} id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,9 +57,8 @@ export default function CustomNavBar(props) {
           </button>
           <div className="w-md-100">
             <div className="dropdown-menu profile-menu-width" style={{ left: "auto", right: 20, }} id="dd" aria-labelledby="navbarDropdown">
-              <p className="dd_sub_heading"> {props.global.userData && (props.global.userData.displayName || " ")}</p>
-              <p className="dd_sub_heading" style={{ color: "#53626A" }}> {props.global.userData && (props.global.userData.officeLocation || 'US Tampa Office')} -{' '}
-                {props.global.plantId}</p>
+              <p className="dd_sub_heading"> Sainag Chunduru</p>
+              <p className="dd_sub_heading" style={{ color: "#53626A" }}>@SainagChunduru</p>
               <div className="dropdown-divider"></div>
               <button className="dropdown-item dd_page pt-1 pb-1 remove_button_styling" onClick={onLogout}>Log Out</button>
             </div>

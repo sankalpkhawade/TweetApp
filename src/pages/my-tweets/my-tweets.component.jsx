@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import "./home.styles.css";
+import "./my-tweets.styles.css";
 import imgProfileEmpty from '../../assets/images/profile.jpeg';
 import imgProfile1 from '../../assets/images/profile-1.jpeg';
 import imgProfile2 from '../../assets/images/profile-2.jpeg';
@@ -9,8 +9,10 @@ import imgProfile5 from '../../assets/images/profile-5.jpeg';
 import imgLikeWhite from '../../assets/images/like-white.png';
 import imgLikeBlue from '../../assets/images/like-blue.png';
 import imgReply from '../../assets/images/reply.png';
+import imgTrash from '../../assets/images/icon_trash@2x.png';
+import imgEdit from '../../assets/images/icon-edit.png';
 
-export default function Home(props) {
+export default function MyTweets(props) {
 
     const [allTweets, setAllTweets] = React.useState([
         {
@@ -160,13 +162,50 @@ export default function Home(props) {
                 tweets[index].showReplies = !tweets[index].showReplies;
                 setAllTweets(tweets);
             }
+
+            const onDeleteClick = () => {
+                let tweets = [...allTweets]
+                tweets.splice(index, 1);
+                setAllTweets(tweets)
+            }
+
+            const onEditClick = () => {
+                let tweets = [...allTweets]
+                tweets[index].isEditing = true
+                setAllTweets(tweets)
+            }
+            const onEditChange = (e) => {
+                let tweets = [...allTweets]
+                console.log(e.target.value)
+                tweets[index].tweet = e.target.value
+                setAllTweets(tweets)
+            }
+            const onSaveClick = (e) => {
+                let tweets = [...allTweets]
+                tweets[index].isEditing = false
+                setAllTweets(tweets)
+            }
             return (
                 <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10 }}>
                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", padding: 20, borderRadius: 10, borderWidth: 1 }}>
                         <img src={imgSrc} className="rounded-circle" height={40} width={40} style={{ marginRight: 20 }} />
-                        <div style={{ width: "100%", justifyContent: "flex-start", display: "inline-flex", flexDirection: "column", alignItems: "flex-start"}}>
-                            <p style={{ fontFamily: "Barlow-SemiBold", fontSize: 16, margin: 0 }}>{tweet.userTweetId} <span style={{ color: "GrayText", fontFamily: "OpenSans-Regular", fontSize: 12 }}>{diffDays} {units} ago</span></p>
-                            <p style={{ borderWidth: 0, fontFamily: "OpenSans-Regular", fontSize: 16, textAlign:"justify" }}>{tweet.tweet}</p>
+                        <div style={{ width: "100%", justifyContent: "flex-start", display: "inline-flex", flexDirection: "column", alignItems: "flex-start" }}>
+                            <div style={{ display: "inline-flex", justifyContent: "space-between", width: "100%" }}>
+                                <p style={{ fontFamily: "Barlow-SemiBold", fontSize: 16, margin: 0 }}>{tweet.userTweetId} <span style={{ color: "GrayText", fontFamily: "OpenSans-Regular", fontSize: 12 }}>{diffDays} {units} ago</span></p>
+                                <div style={{ marginBottom: 10 }}>
+                                    <img className={"ml-4"} src={imgEdit} height={20} width={20} onClick={onEditClick} />
+                                    <img className={"ml-4"} src={imgTrash} height={20} width={20} onClick={onDeleteClick} />
+                                </div>
+
+                            </div>
+                            {
+                                tweet.isEditing ?
+                                    <div style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent:"center" }}>
+                                        <textarea placeholder={"Edit Tweet"} value={tweet.tweet} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, marginRight: 20 }} maxLength={144} onChange={onEditChange} />
+                                        <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 5, borderRadius: 20, marginRight: 30 }} onClick={onSaveClick}>Save</button>
+                                    </div> :
+                                    <p style={{ borderWidth: 0, fontFamily: "OpenSans-Regular", fontSize: 16, textAlign: "justify" }}>{tweet.tweet}</p>
+                            }
                         </div>
 
                     </div>
@@ -182,7 +221,7 @@ export default function Home(props) {
                             <>
                                 <div>
                                     {
-                                        tweet.reply.map((reply , rIndex) => {
+                                        tweet.reply.map((reply, rIndex) => {
                                             let imgSrcIndex = rIndex % 5;
                                             let imgSrc = imgProfileEmpty;
                                             switch (imgSrcIndex) {
@@ -245,15 +284,6 @@ export default function Home(props) {
     return (
         <>
             <div className={"h-100"}>
-                <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "inline-flex", flexDirection: "column", borderRadius: 10 }}>
-                    <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", padding: 20, borderRadius: 10, borderWidth: 1 }}>
-                        <img src={imgProfileEmpty} className="rounded-circle" height={60} width={60} style={{ marginRight: 20 }} />
-                        <textarea placeholder={"What's happening ?"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10 }} maxLength={144} />
-                    </div>
-                    <div style={{ display: "inline-flex", alignItems: "flex-end", justifyContent: "flex-end", width: "100%" }}>
-                        <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onTweetClick}>Tweet</button>
-                    </div>
-                </div>
                 <div>
                     {
                         generateTweets()
