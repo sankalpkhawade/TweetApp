@@ -4,6 +4,7 @@ const initialState = {
   selectedPage: "Login",
   loaderEnabled: false,
   loaderMessage: "",
+  userData: {}
 }
 
 const globalReducer = (state = initialState, action) => {
@@ -25,6 +26,12 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedPage:  action.payload,
+      }
+    }
+    case globalActionTypes.UPDATE_USER_DATA: {
+      return {
+        ...state,
+        userData:  action.payload,
       }
     }
     default: return state;

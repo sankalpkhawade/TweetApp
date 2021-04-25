@@ -42,6 +42,7 @@ export default function Login(props) {
             let token = await authenticate(values.emailId, values.password);
             await localStorage.setItem("isAuthenticated", true);
             await localStorage.setItem("token", token);
+            await localStorage.setItem("loginId", values.emailId);
             props.updateSelectedPage(pages.HOME)
             props.hideLoader();
         } catch (e) {
@@ -60,7 +61,7 @@ export default function Login(props) {
                     </div>
                     <div style={{ marginBottom: 20 }}>
                         <FormControl variant="outlined" fullWidth className="formControl">
-                            <TextField label="Email ID" variant="outlined"
+                            <TextField label="Login ID" variant="outlined"
                                 onChange={handleChange('emailId')}
                                 error={errorMessage != ""} />
                         </FormControl>

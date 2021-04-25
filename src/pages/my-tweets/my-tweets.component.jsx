@@ -11,6 +11,8 @@ import imgLikeBlue from '../../assets/images/like-blue.png';
 import imgReply from '../../assets/images/reply.png';
 import imgTrash from '../../assets/images/icon_trash@2x.png';
 import imgEdit from '../../assets/images/icon-edit.png';
+import { postReplyTweet } from '../home/home.helper';
+import { fetchMyTweets, deleteTweet, updateTweet } from './my-tweets.helper';
 
 export default function MyTweets(props) {
 
@@ -163,11 +165,63 @@ export default function MyTweets(props) {
                 tweets[index].showReplies = !tweets[index].showReplies;
                 setAllTweets(tweets);
             }
+            let replyMessage = ""
+            const onChangeText = (e) => {
+                replyMessage = e.target.value
+            }
+            let userTweetId = tweet.userTweetId;
+            let tweetId = tweet.tweetId
+            const onReplyTweet = async () => {
+                try {
+                    props.showLoader("Posting Reply Tweet")
+                    await postReplyTweet({
+                        tweet: {
+                            "userTweetId": userTweetId,
+                            "tweetId": tweetId,
+                            "reply": [
+                                {
+                                    "userId": props.global.userData.loginId,
+                                    "replied": replyMessage
+                                }
+                            ]
+                        }
 
-            const onDeleteClick = () => {
-                let tweets = [...allTweets]
-                tweets.splice(index, 1);
-                setAllTweets(tweets)
+                    });
+                    let allTweets = await fetchMyTweets();
+                    setAllTweets(allTweets);
+                    props.hideLoader();
+                } catch (e) {
+                    props.hideLoader();
+                }
+            }
+            let tweetMsg = tweet.tweet
+            const onUpdateTweet = async () => {
+                try {
+                    props.showLoader("Updating Tweet")
+                    await updateTweet({
+                        tweet: {
+                            "tweetId": tweetId,
+                            tweet: tweetMsg
+                        }
+                    });
+                    let allTweets = await fetchMyTweets();
+                    setAllTweets(allTweets);
+                    props.hideLoader();
+                } catch (e) {
+                    props.hideLoader();
+                }
+            }
+
+            const onDeleteClick = async () => {
+                try {
+                    props.showLoader("Deleting Tweet")
+                    await deleteTweet(props.global.userData.loginId, tweetId);
+                    let allTweets = await fetchMyTweets();
+                    setAllTweets(allTweets);
+                    props.hideLoader();
+                } catch (e) {
+                    props.hideLoader();
+                }
             }
 
             const onEditClick = () => {
@@ -177,7 +231,6 @@ export default function MyTweets(props) {
             }
             const onEditChange = (e) => {
                 let tweets = [...allTweets]
-                console.log(e.target.value)
                 tweets[index].tweet = e.target.value
                 setAllTweets(tweets)
             }
@@ -203,7 +256,7 @@ export default function MyTweets(props) {
                                 tweet.isEditing ?
                                     <div style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent:"center" }}>
                                         <textarea placeholder={"Edit Tweet"} value={tweet.tweet} multiple={4} style={{ width: "80%", borderWidth: 0, resize: "none", padding: 10, marginRight: 20 }} maxLength={144} onChange={onEditChange} />
-                                        <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 5, borderRadius: 20, marginRight: 30 }} onClick={onSaveClick}>Save</button>
+                                        <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 5, borderRadius: 20, marginRight: 30 }} onClick={onUpdateTweet}>Save</button>
                                     </div> :
                                     <p style={{ borderWidth: 0, fontFamily: "OpenSans-Regular", fontSize: 16, textAlign: "justify" }}>{tweet.tweet}</p>
                             }
@@ -267,10 +320,10 @@ export default function MyTweets(props) {
                                     <p style={{ marginLeft: 20, marginTop: 20, fontSize: 12, fontFamily: "OpenSans-Regular" }}>You are replying to <span style={{ color: "#1DA1F2" }}>{tweet.userTweetId}</span> </p>
                                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", borderRadius: 10, borderWidth: 1, marginLeft: 30 }}>
                                         <img src={imgProfileEmpty} className="rounded-circle" height={30} width={30} style={{ marginRight: 20 }} />
-                                        <textarea placeholder={"Tweet your reply"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, fontSize: 16 }} maxLength={144} />
+                                        <textarea placeholder={"Tweet your reply"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, fontSize: 16 }} maxLength={144} onChange={onChangeText}/>
                                     </div>
                                     <div style={{ display: "inline-flex", alignItems: "flex-end", justifyContent: "flex-end", width: "100%" }}>
-                                        <button style={{ borderWidth: 0, marginTop: 10, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onTweetClick}>Tweet</button>
+                                        <button style={{ borderWidth: 0, marginTop: 10, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onReplyTweet}>Tweet</button>
                                     </div>
                                 </div>
                             </>

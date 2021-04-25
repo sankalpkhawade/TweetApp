@@ -1,5 +1,35 @@
-import { HttpGet } from "../../services/api-services";
-import { BASE_URI, BASE_TWEET_URL, ALL_TWEETS } from "../../constants/endpoints";
+import { HttpGet, HttpPost } from "../../services/api-services";
+import { BASE_URI, BASE_TWEET_URL, ALL_TWEETS, GET_USER } from "../../constants/endpoints";
+
+export const fetchLoggedInUserDetails = () => {
+    try {
+        let credentials = "Basic " + localStorage.getItem("token");
+        let apiUrl = BASE_URI + GET_USER + localStorage.getItem("loginId");
+        console.log(apiUrl)
+        let headers = {
+            "Authorization": credentials
+        }
+        // let response = await HttpGet(apiUrl, {}, headers)
+        let response = {
+            data: {
+                "usersDto": [
+                    {
+                        "loginId": "sainag98",
+                        "firstName": "Sainag",
+                        "lastName": "Chunduru",
+                        "emailId": "sainagchunduru23@gmail.com",
+                        "password": "Dsf",
+                        "contactNumber": 9098765432,
+                        "loggedIn": null
+                    }
+                ]
+            }
+        }
+        return response.data.usersDto[0];
+    } catch (e) {
+        throw e;
+    }
+}
 
 export const fetchAllTweets = async () => {
     try {
@@ -10,8 +40,8 @@ export const fetchAllTweets = async () => {
         }
         // let response = await HttpGet(apiUrl, {}, headers)
         let response = {
-            data:{
-                tweetsDto :[
+            data: {
+                tweetsDto: [
                     {
                         "tweet": "#HackWithInfy, the #codingcompetition for engineering students in India, is back with its fourth edition. Watch this video to know more about the opportunities it brings. Register at https://infy.com/31chPBP?twclid=11386070174013431808 #ForwardwithInfosys",
                         "userTweetId": "John",
@@ -115,6 +145,49 @@ export const fetchAllTweets = async () => {
             }
         }
         return response.data.tweetsDto;
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const postTweet = async (loginId, tweetMessage) => {
+    try {
+        let credentials = "Basic " + localStorage.getItem("token");
+        let headers = {
+            "Authorization": credentials
+        }
+        let apiUrl = BASE_URI + BASE_TWEET_URL + "/" + loginId + "/add" ;
+        await HttpPost(apiUrl, {
+            tweet: {
+                tweet: tweetMessage,
+            }
+        }, headers)
+    } catch (e) {
+        throw e;
+    }
+}
+export const postReplyTweet = async (data) => {
+    try {
+        let credentials = "Basic " + localStorage.getItem("token");
+        let headers = {
+            "Authorization": credentials
+        }
+
+        let apiUrl = BASE_URI + BASE_TWEET_URL + "/reply" ;
+        await HttpPost(apiUrl, data, headers)
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const likeTweet = async (data) => {
+    try {
+        let credentials = "Basic " + localStorage.getItem("token");
+        let headers = {
+            "Authorization": credentials
+        }
+        let apiUrl = BASE_URI + BASE_TWEET_URL + "/like" ;
+        await HttpPost(apiUrl, data, headers)
     } catch (e) {
         throw e;
     }

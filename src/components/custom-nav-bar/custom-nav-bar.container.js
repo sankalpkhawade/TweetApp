@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import CustomNavBar from './custom-nav-bar.component';
-import { showLoader, hideLoader, updateSelectedPage, resetBreadCrumbs, deleteBreadCrumb } from '../../redux/actions/global.actions';
+import { showLoader, hideLoader, updateSelectedPage, updateUserData } from '../../redux/actions/global.actions';
 
 const mapStateToProps = (state, ownProps) => ({
     global: state.globalReducer,
@@ -12,6 +12,7 @@ const mapDispatchToProps = dispatch => ({
     showLoader: (value) => dispatch(showLoader(value)),
     hideLoader: () => dispatch(hideLoader()),
     updateSelectedPage: (value) => dispatch(updateSelectedPage(value)),
+    updateUserData: (value) => dispatch(updateUserData(value)),
 });
 
 export default connect(

@@ -19,3 +19,9 @@ export const updateSelectedPage = (loaderMessage) => {
         payload: loaderMessage
     }
 }
+export const updateUserData = (data) => {
+    return {
+        type: globalActionTypes.UPDATE_USER_DATA,
+        payload: data
+    }
+}

@@ -1,62 +1,31 @@
-import { HttpGet } from "../../../services/api-services";
-import { GraphManager } from "../../../Helpers/GraphManager";
-import { getURL, checkNotNull } from "../../../Helpers/common-helpers";
-import { updatePlantID, updateUserData, updateProfilePic } from "../../../redux/actions/global.actions";
+import { HttpGet } from "../../services/api-services";
+import { BASE_URI, GET_USER } from "../../constants/endpoints";
 
-export const initialiseData = async (dispatch, token) => {
-
+export const fetchLoggedInUserDetails = () => {
   try {
-    // let token = await extractMSALToken();
-    let userData = await getUserData(token); 
-    // userData.displayName = "Ken Hicks"
-    // userData.mail = "ken.hicks@gerdau.com"
-    // userData.officeLocation = "US10 Cartersville Steel Mill"
-    dispatch(updateUserData(userData));
-    let plantId = "1327";
-    if (checkNotNull(userData.officeLocation)) {
-      let result = await getPlantID(userData.officeLocation)
-      if (checkNotNull(result)) {
-        if (result === "7320") {
-          plantId = "1327"
-        } else {
-          plantId = result;
-        }
+      let credentials = "Basic " + localStorage.getItem("token");
+      let apiUrl = BASE_URI + GET_USER + localStorage.getItem("loginId");
+      let headers = {
+          "Authorization": credentials
       }
-    }
-    dispatch(updatePlantID(plantId));
-    let imageURL = await getProfilePic(token);
-    dispatch(updateProfilePic(imageURL))
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-const getUserData = async (token) => {
-  try {
-    let userData = await GraphManager.getUserAsync(token);
-    return userData;
-  }
-  catch (err) {
-    throw err;
-  }
-}
-
-const getPlantID = async (officeLocation) => {
-  try {
-    let encodedValue = encodeURI(officeLocation)
-    let apiURL = getURL("/plants/names/" + encodedValue)
-    let result = await HttpGet(apiURL);
-    return result.data.message.data.plants[0].code;
-  } catch (err) {
-    return null;
-  }
-}
-
-const getProfilePic = async (token) => {
-  try {
-    let blob = await GraphManager.getPhotoAsync(token);
-    return window.URL.createObjectURL(blob)
+      // let response = await HttpGet(apiUrl, {}, headers)
+      let response = {
+          data: {
+              "usersDto": [
+                  {
+                      "loginId": "sainag98",
+                      "firstName": "Sainag",
+                      "lastName": "Chunduru",
+                      "emailId": "sainagchunduru23@gmail.com",
+                      "password": "Dsf",
+                      "contactNumber": 9098765432,
+                      "loggedIn": null
+                  }
+              ]
+          }
+      }
+      return response.data.usersDto[0];
   } catch (e) {
-    throw e;
+      throw e;
   }
 }

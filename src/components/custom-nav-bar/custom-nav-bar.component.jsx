@@ -4,6 +4,7 @@ import imgTweetLogo from '../../assets/images/logo-white.png';
 import imgProfileEmpty from '../../assets/images/profile.jpeg';
 import { pages } from '../../constants/strings';
 import 'bootstrap/dist/js/bootstrap.bundle'
+import { fetchLoggedInUserDetails } from './custom-nav-bar.helper';
 
 export default function CustomNavBar(props) {
 
@@ -15,14 +16,15 @@ export default function CustomNavBar(props) {
     const initialise = async () => {
       try {
         props.showLoader('Initialising Data');
-        await props.initialiseData();
+        let userDetails = await fetchLoggedInUserDetails();
+        props.updateUserData(userDetails);
         props.hideLoader();
       } catch (err) {
         console.log(err);
         props.hideLoader();
       }
     };
-    // initialise();
+    initialise();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -57,8 +59,8 @@ export default function CustomNavBar(props) {
           </button>
           <div className="w-md-100">
             <div className="dropdown-menu profile-menu-width" style={{ left: "auto", right: 20, }} id="dd" aria-labelledby="navbarDropdown">
-              <p className="dd_sub_heading"> Sainag Chunduru</p>
-              <p className="dd_sub_heading" style={{ color: "#53626A" }}>@SainagChunduru</p>
+              <p className="dd_sub_heading">{props.global.userData.firstName} {props.global.userData.lastName}</p>
+              <p className="dd_sub_heading" style={{ color: "#53626A" }}>@{props.global.userData.loginId}</p>
               <div className="dropdown-divider"></div>
               <button className="dropdown-item dd_page pt-1 pb-1 remove_button_styling" onClick={onLogout}>Log Out</button>
             </div>

@@ -9,7 +9,7 @@ import imgProfile5 from '../../assets/images/profile-5.jpeg';
 import imgLikeWhite from '../../assets/images/like-white.png';
 import imgLikeBlue from '../../assets/images/like-blue.png';
 import imgReply from '../../assets/images/reply.png';
-import { fetchAllTeets, fetchAllTweets } from './home.helper';
+import { fetchAllTweets, postTweet, postReplyTweet } from './home.helper';
 
 
 export default function Home(props) {
@@ -17,10 +17,19 @@ export default function Home(props) {
         initialise();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.global.selectedPage]);
-
+    const [tweetMessage, setTweetMessage] = React.useState("")
     const [allTweets, setAllTweets] = React.useState([])
-    const onTweetClick = () => {
-
+    const onTweetClick = async () => {
+        try {
+            props.showLoader("Posting Tweet")
+            await postTweet(props.global.userData.loginId, tweetMessage);
+            setTweetMessage("")
+            let allTweets = await fetchAllTweets();
+            setAllTweets(allTweets);
+            props.hideLoader();
+        } catch (e) {
+            props.hideLoader();
+        }
     }
 
     const initialise = async () => {
@@ -64,16 +73,45 @@ export default function Home(props) {
                 }
             }
             const onLikeClick = () => {
+                
                 let tweets = [...allTweets]
                 tweets[index].like = tweets[index].isLiked ? parseInt(tweets[index].like) - 1 : parseInt(tweets[index].like) + 1;
                 tweets[index].isLiked = !tweets[index].isLiked;
                 setAllTweets(tweets);
             }
-
             const onReplyClick = () => {
                 let tweets = [...allTweets]
                 tweets[index].showReplies = !tweets[index].showReplies;
                 setAllTweets(tweets);
+            }
+            let replyMessage = ""
+            const onChangeText = (e) => {
+                replyMessage = e.target.value
+            }
+            let userTweetId = tweet.userTweetId;
+            let tweetId = tweet.tweetId
+            const onReplyTweet = async () => {
+                try {
+                    props.showLoader("Posting Reply Tweet")
+                    await postReplyTweet({
+                        tweet: {
+                            "userTweetId": userTweetId,
+                            "tweetId": tweetId,
+                            "reply": [
+                                {
+                                    "userId": props.global.userData.loginId,
+                                    "replied": replyMessage
+                                }
+                            ]
+                        }
+
+                    });
+                    let allTweets = await fetchAllTweets();
+                    setAllTweets(allTweets);
+                    props.hideLoader();
+                } catch (e) {
+                    props.hideLoader();
+                }
             }
             return (
                 <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10, marginBottom: 10 }}>
@@ -98,6 +136,7 @@ export default function Home(props) {
                                 <div>
                                     {
                                         tweet.reply.map((reply, rIndex) => {
+
                                             let imgSrcIndex = rIndex % 5;
                                             let imgSrc = imgProfileEmpty;
                                             switch (imgSrcIndex) {
@@ -113,6 +152,7 @@ export default function Home(props) {
                                                     break;
 
                                             }
+
                                             const replydate1 = new Date();
                                             const replydate2 = new Date(reply.dateReplied);
                                             const replydiffTime = Math.abs(replydate2 - replydate1);
@@ -142,10 +182,10 @@ export default function Home(props) {
                                     <p style={{ marginLeft: 20, marginTop: 20, fontSize: 12, fontFamily: "OpenSans-Regular" }}>You are replying to <span style={{ color: "#1DA1F2" }}>{tweet.userTweetId}</span> </p>
                                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", borderRadius: 10, borderWidth: 1, marginLeft: 30 }}>
                                         <img src={imgProfileEmpty} className="rounded-circle" height={30} width={30} style={{ marginRight: 20 }} />
-                                        <textarea placeholder={"Tweet your reply"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, fontSize: 16 }} maxLength={144} />
+                                        <textarea placeholder={"Tweet your reply"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, fontSize: 16 }} maxLength={144} onChange={onChangeText} />
                                     </div>
                                     <div style={{ display: "inline-flex", alignItems: "flex-end", justifyContent: "flex-end", width: "100%" }}>
-                                        <button style={{ borderWidth: 0, marginTop: 10, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onTweetClick}>Tweet</button>
+                                        <button style={{ borderWidth: 0, marginTop: 10, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onReplyTweet}>Tweet</button>
                                     </div>
                                 </div>
                             </>
@@ -163,7 +203,7 @@ export default function Home(props) {
                 <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "inline-flex", flexDirection: "column", borderRadius: 10 }}>
                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", padding: 20, borderRadius: 10, borderWidth: 1 }}>
                         <img src={imgProfileEmpty} className="rounded-circle" height={60} width={60} style={{ marginRight: 20 }} />
-                        <textarea placeholder={"What's happening ?"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10 }} maxLength={144} />
+                        <textarea placeholder={"What's happening ?"} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10 }} maxLength={144} value={tweetMessage} onChange={(e) => setTweetMessage(e.target.value)} />
                     </div>
                     <div style={{ display: "inline-flex", alignItems: "flex-end", justifyContent: "flex-end", width: "100%" }}>
                         <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 10, borderRadius: 20, marginBottom: 20, marginRight: 30 }} onClick={onTweetClick}>Tweet</button>
