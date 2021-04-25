@@ -8,60 +8,27 @@ import imgProfile4 from '../../assets/images/profile-4.png';
 import imgProfile5 from '../../assets/images/profile-5.jpeg';
 import imgEmail from '../../assets/images/email.png';
 import imgPhone from '../../assets/images/phone.png';
+import { fetchAllUsers } from './all-users.helper';
 
 export default function MyTweets(props) {
-
-    const [allUsers, setAllUsers] = React.useState([
-        {
-            "loginId": "finny",
-            "firstName": "finny",
-            "lastName": "gathala",
-            "emailId": "finnylaurence@gmail.com",
-            "password": "$2a$10$CLWpoE7Z1kBkisoFvAVOgu4MJr/7qDvmRvo/HNGfIF8kWJG4jcM62",
-            "contactNumber": "9603340903",
-            "loggedIn": true
-        },
-        {
-            "loginId": "budamkay",
-            "firstName": "bud",
-            "lastName": "mkay",
-            "emailId": "bud@gmail.com",
-            "password": "$2a$10$E9tRoQKF7AlEopLCKIebVOtKaHsno5eB3ZkyOMyaYcz9ghnbm/azG",
-            "contactNumber": "9999",
-            "loggedIn": false
-        },
-        {
-            "loginId": "fudamkay",
-            "firstName": "bud",
-            "lastName": "mkay",
-            "emailId": "fud@gmail.com",
-            "password": "$2a$10$KNJsigty8NaOJBl7NpkHRu8eZBIEiGuI0bq5wXoDGwLusVORJiuW6",
-            "contactNumber": "9999",
-            "loggedIn": false
-        },
-        {
-            "loginId": "klaus",
-            "firstName": "klaus",
-            "lastName": "klaus",
-            "emailId": "klaus@gmail.com",
-            "password": "$2a$10$1Uoh.7efpGHAy6z5nsV7cOSPduYtMc70c/dn4h06yzMLYz/5ZK.q6",
-            "contactNumber": "99999",
-            "loggedIn": true
-        },
-        {
-            "loginId": "mini",
-            "firstName": "mini",
-            "lastName": "mini",
-            "emailId": "mini@gmail.com",
-            "password": "$2a$10$CWvGKmSp13NcnzoaSkxhTu4GRNProa2aXPwc2bXl4ya45aD051Cv.",
-            "contactNumber": "9999",
-            "loggedIn": true
-        }
-    ])
+    React.useEffect(() => {
+        initialise();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.global.selectedPage]);
+    const [allUsers, setAllUsers] = React.useState([])
     const onTweetClick = () => {
 
     }
-
+    const initialise = async () => {
+        try {
+            props.showLoader("Fetching All Users")
+            let allUsers = await fetchAllUsers();
+            setAllUsers(allUsers);
+            props.hideLoader();
+        } catch (e) {
+            props.hideLoader();
+        }
+    }
     const generateTweets = () => {
 
         return allUsers.map((tweet, index) => {
@@ -89,11 +56,11 @@ export default function MyTweets(props) {
                             <div style={{ display: "inline-flex", justifyContent: "space-between", width: "100%" }}>
                                 <p style={{ fontFamily: "Barlow-SemiBold", fontSize: 16, margin: 0 }}>{tweet.firstName} {tweet.lastName} <span style={{ color: "GrayText", fontFamily: "OpenSans-Regular", fontSize: 12 }}>@{tweet.loginId}</span></p>
                             </div>
-                            <div style={{flexDirection:"row", display:"inline-flex", alignItems:"center", marginTop: 10}}>
-                                <img src={imgEmail} height={20} width={20} style={{marginRight:5}}/>
-                                <p style={{marginRight:10, marginBottom: 0}}>{tweet.emailId} </p>
-                                <img src={imgPhone} height={20} width={20} style={{marginRight:5}}/>
-                                <p style={{marginRight:5,  marginBottom: 0}}>{tweet.contactNumber}</p>
+                            <div style={{ flexDirection: "row", display: "inline-flex", alignItems: "center", marginTop: 10 }}>
+                                <img src={imgEmail} height={20} width={20} style={{ marginRight: 5 }} />
+                                <p style={{ marginRight: 10, marginBottom: 0 }}>{tweet.emailId} </p>
+                                <img src={imgPhone} height={20} width={20} style={{ marginRight: 5 }} />
+                                <p style={{ marginRight: 5, marginBottom: 0 }}>{tweet.contactNumber}</p>
                             </div>
                         </div>
                     </div>
