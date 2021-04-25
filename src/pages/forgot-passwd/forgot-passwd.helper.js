@@ -10,7 +10,7 @@ export const forgotPassword = async (email, password) => {
                 password: password
             }
         })
-        if(response.data.statusMessage == "FAILURE"){
+        if(response.data.statusMessage == "USER NOT FOUND"){
             throw "User does not exist"
         }
     } catch (e) {
