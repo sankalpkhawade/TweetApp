@@ -47,6 +47,7 @@ export default function Login(props) {
             props.hideLoader();
         } catch (e) {
             setErrorMessage("Incorrect Credentials")
+            props.hideLoader();
         }
     }
     return (
