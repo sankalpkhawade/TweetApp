@@ -9,6 +9,7 @@ import { pages } from './constants/strings';
 import Register from './pages/register';
 import React from 'react';
 import Root from "./pages/root.component.js";
+import { ToastContainer } from 'react-toastify';
 
 export default function () {
   return (
@@ -16,6 +17,8 @@ export default function () {
       <div className="App">
         <AppContainer />
       </div>
+      <ToastContainer
+        hideProgressBar />
     </Provider>
   );
 }
@@ -35,9 +38,9 @@ export function App(props) {
       <CustomLoader />
       {
         isAuthenticated ?
-          <div style={{width:"100%", height:"100%", }}>
+          <div style={{ width: "100%", height: "100%", }}>
             <CustomNavBar />
-            <Root selectedPage={props.global.selectedPage}/>
+            <Root selectedPage={props.global.selectedPage} />
           </div>
           :
           props.global.selectedPage == pages.LOGIN ?

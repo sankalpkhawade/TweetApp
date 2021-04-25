@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import imgLogo from "../../assets/images/logo.png";
 import { pages } from '../../constants/strings';
 import TextField from '@material-ui/core/TextField';
+import { authenticate } from './login.helper';
 
 export default function Login(props) {
     const [values, setValues] = React.useState({
@@ -36,11 +37,14 @@ export default function Login(props) {
         props.updateSelectedPage(pages.REGISTER)
     }
     const onLoginClick = async () => {
-
-        if (values.emailId = "sainag" && values.password == "sainag") {
+        try {
+            props.showLoader("Logging in")
+            let token = await authenticate(values.emailId, values.password);
             await localStorage.setItem("isAuthenticated", true);
+            await localStorage.setItem("token", token);
             props.updateSelectedPage(pages.HOME)
-        } else {
+            props.hideLoader();
+        } catch (e) {
             setErrorMessage("Incorrect Credentials")
         }
     }
@@ -85,7 +89,11 @@ export default function Login(props) {
                         </FormControl>
                     </div>
                     <div>
-                        <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: "100%", padding: 10, borderRadius: 20, marginBottom: 20 }} onClick={onLoginClick}>Log in</button>
+                        {
+                            (values.emailId != "" && values.password != "") ?
+                                <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: "100%", padding: 10, borderRadius: 20, marginBottom: 20 }} onClick={onLoginClick}>Log in</button>
+                                : <button style={{ borderWidth: 0, backgroundColor: "#b9dbf0", color: "white", width: "100%", padding: 10, borderRadius: 20, marginBottom: 20 }}>Log in</button>
+                        }
                     </div>
                     <div>
                         <a style={{ cursor: "pointer", marginRight: 10, color: "#1DA1F2" }} className="loginLink" onClick={onForgotPasswordClick}>Forgot Password?</a>
