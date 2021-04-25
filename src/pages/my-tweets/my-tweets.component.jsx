@@ -16,7 +16,7 @@ import { fetchMyTweets, deleteTweet, updateTweet } from './my-tweets.helper';
 
 export default function MyTweets(props) {
 
-    const [allTweets, setAllTweets] = React.useState()
+    const [allTweets, setAllTweets] = React.useState([])
     React.useEffect(() => {
         initialise();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,7 +25,7 @@ export default function MyTweets(props) {
     const initialise = async () => {
         try {
             props.showLoader("Fetching My Tweets")
-            let allTweets = await fetchMyTweets();
+            let allTweets = await fetchMyTweets(props.global.userData.loginId);
             setAllTweets(allTweets);
             props.hideLoader();
         } catch (e) {
@@ -97,7 +97,7 @@ export default function MyTweets(props) {
                         }
 
                     });
-                    let allTweets = await fetchMyTweets();
+                    let allTweets = await fetchMyTweets(props.global.userData.loginId);
                     setAllTweets(allTweets);
                     props.hideLoader();
                 } catch (e) {
@@ -114,7 +114,7 @@ export default function MyTweets(props) {
                             tweet: tweetMsg
                         }
                     });
-                    let allTweets = await fetchMyTweets();
+                    let allTweets = await fetchMyTweets(props.global.userData.loginId);
                     setAllTweets(allTweets);
                     props.hideLoader();
                 } catch (e) {
@@ -126,7 +126,7 @@ export default function MyTweets(props) {
                 try {
                     props.showLoader("Deleting Tweet")
                     await deleteTweet(props.global.userData.loginId, tweetId);
-                    let allTweets = await fetchMyTweets();
+                    let allTweets = await fetchMyTweets(props.global.userData.loginId);
                     setAllTweets(allTweets);
                     props.hideLoader();
                 } catch (e) {
