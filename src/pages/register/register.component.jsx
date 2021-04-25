@@ -77,10 +77,9 @@ export default function Register(props) {
     };
 
     const onRegisterClick = async () => {
-        console.log(validateInputs())
         if (validateInputs()) {
             try {
-                props.showLoader("Resetting Password");
+                props.showLoader("Creating User");
                 await register(values);
                 toast.success("User Registration Sucessfull")
                 props.updateSelectedPage(pages.LOGIN)
