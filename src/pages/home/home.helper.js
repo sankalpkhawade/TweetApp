@@ -3,7 +3,7 @@ import { BASE_URI, BASE_TWEET_URL, ALL_TWEETS, GET_USER } from "../../constants/
 
 export const fetchLoggedInUserDetails = async () => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let apiUrl = BASE_URI + GET_USER + localStorage.getItem("loginId");
         console.log(apiUrl)
         let headers = {
@@ -33,7 +33,7 @@ export const fetchLoggedInUserDetails = async () => {
 
 export const fetchAllTweets = async () => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let apiUrl = BASE_URI + BASE_TWEET_URL + ALL_TWEETS;
         let headers = {
             "Authorization": credentials
@@ -152,7 +152,7 @@ export const fetchAllTweets = async () => {
 
 export const postTweet = async (loginId, tweetMessage) => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let headers = {
             "Authorization": credentials
         }
@@ -168,7 +168,7 @@ export const postTweet = async (loginId, tweetMessage) => {
 }
 export const postReplyTweet = async (data) => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let headers = {
             "Authorization": credentials
         }
@@ -182,7 +182,7 @@ export const postReplyTweet = async (data) => {
 
 export const likeTweet = async (data) => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let headers = {
             "Authorization": credentials
         }

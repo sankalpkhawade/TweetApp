@@ -3,7 +3,7 @@ import { BASE_URI, BASE_TWEET_URL, ALL_USERS } from "../../constants/endpoints";
 
 export const fetchAllUsers = async () => {
     try {
-        let credentials = "Basic " + localStorage.getItem("token");
+        let credentials = "Bearer " + localStorage.getItem("token");
         let apiUrl = BASE_URI + BASE_TWEET_URL + ALL_USERS;
         let headers = {
             "Authorization": credentials
