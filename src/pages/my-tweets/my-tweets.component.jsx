@@ -20,6 +20,7 @@ export default function MyTweets(props) {
             "userTweetId": "John",
             "tweetId": 1,
             "like": 3,
+            "isLiked": true,
             "reply": [
                 {
                     "userId": "daviyu",
@@ -186,7 +187,7 @@ export default function MyTweets(props) {
                 setAllTweets(tweets)
             }
             return (
-                <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10 }}>
+                <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10, marginBottom: 10 }}>
                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", padding: 20, borderRadius: 10, borderWidth: 1 }}>
                         <img src={imgSrc} className="rounded-circle" height={40} width={40} style={{ marginRight: 20 }} />
                         <div style={{ width: "100%", justifyContent: "flex-start", display: "inline-flex", flexDirection: "column", alignItems: "flex-start" }}>
@@ -201,7 +202,7 @@ export default function MyTweets(props) {
                             {
                                 tweet.isEditing ?
                                     <div style={{ width: "100%", display: "inline-flex", alignItems: "center", justifyContent:"center" }}>
-                                        <textarea placeholder={"Edit Tweet"} value={tweet.tweet} multiple={4} style={{ width: "80%", height: 50, borderWidth: 0, resize: "none", padding: 10, marginRight: 20 }} maxLength={144} onChange={onEditChange} />
+                                        <textarea placeholder={"Edit Tweet"} value={tweet.tweet} multiple={4} style={{ width: "80%", borderWidth: 0, resize: "none", padding: 10, marginRight: 20 }} maxLength={144} onChange={onEditChange} />
                                         <button style={{ borderWidth: 0, backgroundColor: "#1DA1F2", color: "white", width: 100, padding: 5, borderRadius: 20, marginRight: 30 }} onClick={onSaveClick}>Save</button>
                                     </div> :
                                     <p style={{ borderWidth: 0, fontFamily: "OpenSans-Regular", fontSize: 16, textAlign: "justify" }}>{tweet.tweet}</p>

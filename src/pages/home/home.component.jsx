@@ -10,6 +10,7 @@ import imgLikeWhite from '../../assets/images/like-white.png';
 import imgLikeBlue from '../../assets/images/like-blue.png';
 import imgReply from '../../assets/images/reply.png';
 
+
 export default function Home(props) {
 
     const [allTweets, setAllTweets] = React.useState([
@@ -161,7 +162,7 @@ export default function Home(props) {
                 setAllTweets(tweets);
             }
             return (
-                <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10 }}>
+                <div className="shadow" style={{ width: "60%", marginLeft: "auto", marginRight: "auto", alignItems: "flex-start", display: "flex", flexDirection: "column", borderRadius: 10 , marginBottom: 10}}>
                     <div style={{ alignItems: "flex-start", display: "inline-flex", width: "100%", padding: 20, borderRadius: 10, borderWidth: 1 }}>
                         <img src={imgSrc} className="rounded-circle" height={40} width={40} style={{ marginRight: 20 }} />
                         <div style={{ width: "100%", justifyContent: "flex-start", display: "inline-flex", flexDirection: "column", alignItems: "flex-start"}}>

@@ -2,6 +2,7 @@ import React from 'react';
 import Home from './home';
 import { pages } from '../constants/strings';
 import MyTweets from './my-tweets';
+import AllUsers from './all-users';
 
 export default function Root(props) {
   let component = null;
@@ -12,6 +13,10 @@ export default function Root(props) {
     }
     case pages.MY_TWEETS: {
       component = <MyTweets />;
+      break;
+    }
+    case pages.ALL_USERS: {
+      component = <AllUsers />;
       break;
     }
     default:
