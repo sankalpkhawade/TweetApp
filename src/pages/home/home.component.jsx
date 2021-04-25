@@ -9,7 +9,7 @@ import imgProfile5 from '../../assets/images/profile-5.jpeg';
 import imgLikeWhite from '../../assets/images/like-white.png';
 import imgLikeBlue from '../../assets/images/like-blue.png';
 import imgReply from '../../assets/images/reply.png';
-import { fetchAllTweets, postTweet, postReplyTweet } from './home.helper';
+import { fetchAllTweets, postTweet, postReplyTweet, likeTweet } from './home.helper';
 
 
 export default function Home(props) {
@@ -72,12 +72,25 @@ export default function Home(props) {
                     units = diffDays > 1 ? "days" : "day"
                 }
             }
+            let userTweetId = tweet.userTweetId;
+            let tweetId = tweet.tweetId
             const onLikeClick = () => {
-                
-                let tweets = [...allTweets]
-                tweets[index].like = tweets[index].isLiked ? parseInt(tweets[index].like) - 1 : parseInt(tweets[index].like) + 1;
-                tweets[index].isLiked = !tweets[index].isLiked;
-                setAllTweets(tweets);
+                try {
+                    let tweets = [...allTweets]
+                    tweets[index].like = tweets[index].isLiked ? parseInt(tweets[index].like) - 1 : parseInt(tweets[index].like) + 1;
+                    if (!tweets[index].isLiked) {
+                        likeTweet({
+                            tweet: {
+                                tweetId: tweetId
+                            }
+                        })
+                    }
+                    allTweets[index].isLiked = !allTweets[index].isLiked;
+                    setAllTweets(tweets);
+                } catch (e) {
+                    console.log(e)
+                }
+
             }
             const onReplyClick = () => {
                 let tweets = [...allTweets]
@@ -88,8 +101,7 @@ export default function Home(props) {
             const onChangeText = (e) => {
                 replyMessage = e.target.value
             }
-            let userTweetId = tweet.userTweetId;
-            let tweetId = tweet.tweetId
+
             const onReplyTweet = async () => {
                 try {
                     props.showLoader("Posting Reply Tweet")

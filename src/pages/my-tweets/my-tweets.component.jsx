@@ -12,7 +12,7 @@ import imgReply from '../../assets/images/reply.png';
 import imgTrash from '../../assets/images/icon_trash@2x.png';
 import imgEdit from '../../assets/images/icon-edit.png';
 import { postReplyTweet } from '../home/home.helper';
-import { fetchMyTweets, deleteTweet, updateTweet } from './my-tweets.helper';
+import { fetchMyTweets, deleteTweet, updateTweet, likeTweet } from './my-tweets.helper';
 
 export default function MyTweets(props) {
 
@@ -64,12 +64,23 @@ export default function MyTweets(props) {
                 }
             }
             const onLikeClick = () => {
-                let tweets = [...allTweets]
-                tweets[index].like = tweets[index].isLiked ? parseInt(tweets[index].like) - 1 : parseInt(tweets[index].like) + 1;
-                tweets[index].isLiked = !tweets[index].isLiked;
-                setAllTweets(tweets);
-            }
+                try {
+                    let tweets = [...allTweets]
+                    tweets[index].like = tweets[index].isLiked ? parseInt(tweets[index].like) - 1 : parseInt(tweets[index].like) + 1;
+                    if (!tweets[index].isLiked) {
+                        likeTweet({
+                            tweet: {
+                                tweetId: tweetId
+                            }
+                        })
+                    }
+                    allTweets[index].isLiked = !allTweets[index].isLiked;
+                    setAllTweets(tweets);
+                } catch (e) {
+                    console.log(e)
+                }
 
+            }
             const onReplyClick = () => {
                 let tweets = [...allTweets]
                 tweets[index].showReplies = !tweets[index].showReplies;

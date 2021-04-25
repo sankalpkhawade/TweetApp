@@ -8,7 +8,7 @@ export const likeTweet = async (data) => {
             "Authorization": credentials
         }
         let apiUrl = BASE_URI + BASE_TWEET_URL + "/like" ;
-        await HttpPost(apiUrl, data)
+        await HttpPost(apiUrl, data, headers)
     } catch (e) {
         throw e;
     }
