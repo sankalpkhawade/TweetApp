@@ -11,7 +11,7 @@ export const register = async (values) => {
                 firstName: values.firstName,
                 lastName: values.lastName,
                 emailId: values.emailId,
-                contactNumber: "9999"
+                contactNumber: values.contactNumber
             }
         })
     } catch (e) {
